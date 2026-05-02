@@ -35,7 +35,7 @@ export async function run(argv = process.argv.slice(2)): Promise<number> {
     const options = parsePlanArgs(rest);
     const plan = await createPlan({
       rootDir: options.rootDir,
-      agentsPath: options.agentsPath,
+      ...(options.agentsPath ? { agentsPath: options.agentsPath } : {}),
       includeCoreLane: options.includeCoreLane
     });
 
@@ -107,7 +107,7 @@ function parsePlanArgs(args: string[]): CliOptions {
     rootDir: path.resolve(rootDir),
     format,
     includeCoreLane,
-    agentsPath
+    ...(agentsPath ? { agentsPath } : {})
   };
 }
 

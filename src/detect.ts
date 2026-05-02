@@ -22,12 +22,12 @@ export async function detectRepoFacts(rootDir: string, agentsPath?: string): Pro
   return {
     rootDir,
     repoName: path.basename(rootDir),
-    packageName: packageJson?.name,
+    ...(packageJson?.name ? { packageName: packageJson.name } : {}),
     packageManager: detectPackageManager(files),
     files,
     directories,
     hasAgentsFile: agentsGuidance !== undefined,
-    agentsGuidance,
+    ...(agentsGuidance !== undefined ? { agentsGuidance } : {}),
     scripts: packageJson?.scripts ?? {},
     hasNodeProject: packageJson !== undefined
   };
