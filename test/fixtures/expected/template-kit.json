@@ -1,0 +1,74 @@
+{
+  "summary": {
+    "repoName": "template-kit",
+    "packageManager": "npm",
+    "laneCount": 2,
+    "generatedAt": "2026-05-02T08:00:00.000Z",
+    "inputRoot": "/Users/roger/Developer/my-opensource/agentlane/fixtures/repos/template-kit",
+    "signals": [
+      "files:4",
+      "directories:2",
+      "lanes:2",
+      "package-manager:npm"
+    ]
+  },
+  "lanes": [
+    {
+      "id": "docs",
+      "kind": "docs",
+      "title": "Documentation lane",
+      "rationale": "The repo already has docs-oriented content, so a docs lane can move quickly inside README.md, CHANGELOG.md.",
+      "branchName": "lane/template-kit-docs",
+      "allowedPaths": [
+        "README.md",
+        "CHANGELOG.md"
+      ],
+      "stopBeforeTouchingPaths": [
+        "bun.lockb",
+        "package-lock.json",
+        "pnpm-lock.yaml",
+        "src/**",
+        "yarn.lock"
+      ],
+      "checks": [
+        "bash scripts/validate.sh",
+        "manual markdown review"
+      ],
+      "acceptanceCriteria": [
+        "Docs clearly describe the relevant workflow and match current CLI behavior.",
+        "Examples and command snippets are copy-pasteable.",
+        "Changes stay local-first: no telemetry, no hidden network activity, no surprise shell execution.",
+        "If an AGENTS.md file appears later, re-run planning before changing protected areas."
+      ]
+    },
+    {
+      "id": "release",
+      "kind": "release",
+      "title": "Release readiness lane",
+      "rationale": "Release metadata lives in CHANGELOG.md, README.md, which is a natural lane for changelog and packaging work.",
+      "branchName": "lane/template-kit-release",
+      "allowedPaths": [
+        "CHANGELOG.md",
+        "README.md"
+      ],
+      "stopBeforeTouchingPaths": [
+        "bun.lockb",
+        "package-lock.json",
+        "pnpm-lock.yaml",
+        "src/**",
+        "yarn.lock"
+      ],
+      "checks": [
+        "bash scripts/validate.sh",
+        "npm run build",
+        "npm test"
+      ],
+      "acceptanceCriteria": [
+        "Release metadata matches the actual shipped behavior.",
+        "Changelog and package metadata are consistent.",
+        "Any publish step remains explicit and human-approved.",
+        "If an AGENTS.md file appears later, re-run planning before changing protected areas."
+      ]
+    }
+  ]
+}

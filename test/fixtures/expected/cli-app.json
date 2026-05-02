@@ -1,0 +1,201 @@
+{
+  "summary": {
+    "repoName": "fixture-cli-app",
+    "packageManager": "unknown",
+    "laneCount": 6,
+    "generatedAt": "2026-05-02T08:00:00.000Z",
+    "inputRoot": "/Users/roger/Developer/my-opensource/agentlane/fixtures/repos/cli-app",
+    "signals": [
+      "files:7",
+      "directories:5",
+      "lanes:6",
+      "package-manager:unknown",
+      "agents-guidance:present",
+      "ci-config:present"
+    ]
+  },
+  "lanes": [
+    {
+      "id": "core",
+      "kind": "core",
+      "title": "Core planner lane",
+      "rationale": "Implementation-heavy work belongs in src/**, package.json, tsconfig.json while other lanes avoid those files.",
+      "branchName": "lane/fixture-cli-app-core",
+      "allowedPaths": [
+        "src/**",
+        "package.json",
+        "tsconfig.json"
+      ],
+      "stopBeforeTouchingPaths": [
+        ".github/**",
+        "AGENTS.md",
+        "bun.lockb",
+        "package-lock.json",
+        "pnpm-lock.yaml",
+        "yarn.lock"
+      ],
+      "checks": [
+        "npm run build",
+        "npm run check",
+        "npm test"
+      ],
+      "acceptanceCriteria": [
+        "The planner remains deterministic for identical inputs.",
+        "Path scopes are conservative enough to avoid lane collisions.",
+        "Changes stay local-first: no telemetry, no hidden network activity, no surprise shell execution.",
+        "The lane respects AGENTS.md guidance and pauses before touching protected areas."
+      ]
+    },
+    {
+      "id": "ci",
+      "kind": "ci",
+      "title": "CI and verification lane",
+      "rationale": "Automation and contributor checks are concentrated in .github/**, package.json, which makes CI work easy to review.",
+      "branchName": "lane/fixture-cli-app-ci",
+      "allowedPaths": [
+        ".github/**",
+        "package.json"
+      ],
+      "stopBeforeTouchingPaths": [
+        "AGENTS.md",
+        "bun.lockb",
+        "package-lock.json",
+        "pnpm-lock.yaml",
+        "src/**",
+        "yarn.lock"
+      ],
+      "checks": [
+        "bash scripts/validate.sh"
+      ],
+      "acceptanceCriteria": [
+        "Automation is explicit, reviewable, and safe to run in forks.",
+        "Checks cover the intended contributor workflow without hidden side effects.",
+        "Changes stay local-first: no telemetry, no hidden network activity, no surprise shell execution.",
+        "The lane respects AGENTS.md guidance and pauses before touching protected areas."
+      ]
+    },
+    {
+      "id": "cli",
+      "kind": "cli",
+      "title": "CLI surface lane",
+      "rationale": "This repo exposes a command-line entrypoint, so CLI ergonomics should stay scoped to src/cli.ts, src/**/*.ts, bin/**, package.json.",
+      "branchName": "lane/fixture-cli-app-cli",
+      "allowedPaths": [
+        "src/cli.ts",
+        "src/**/*.ts",
+        "bin/**",
+        "package.json"
+      ],
+      "stopBeforeTouchingPaths": [
+        ".github/**",
+        "AGENTS.md",
+        "bun.lockb",
+        "package-lock.json",
+        "pnpm-lock.yaml",
+        "yarn.lock"
+      ],
+      "checks": [
+        "node dist/cli.js plan --help",
+        "npm run build",
+        "npm run smoke"
+      ],
+      "acceptanceCriteria": [
+        "CLI help and output stay deterministic for the same repo input.",
+        "Machine-readable output remains stable and documented.",
+        "Changes stay local-first: no telemetry, no hidden network activity, no surprise shell execution.",
+        "The lane respects AGENTS.md guidance and pauses before touching protected areas."
+      ]
+    },
+    {
+      "id": "docs",
+      "kind": "docs",
+      "title": "Documentation lane",
+      "rationale": "The repo already has docs-oriented content, so a docs lane can move quickly inside README.md.",
+      "branchName": "lane/fixture-cli-app-docs",
+      "allowedPaths": [
+        "README.md"
+      ],
+      "stopBeforeTouchingPaths": [
+        "AGENTS.md",
+        "bun.lockb",
+        "package-lock.json",
+        "pnpm-lock.yaml",
+        "src/**",
+        "yarn.lock"
+      ],
+      "checks": [
+        "bash scripts/validate.sh",
+        "manual markdown review"
+      ],
+      "acceptanceCriteria": [
+        "Docs clearly describe the relevant workflow and match current CLI behavior.",
+        "Examples and command snippets are copy-pasteable.",
+        "Changes stay local-first: no telemetry, no hidden network activity, no surprise shell execution.",
+        "The lane respects AGENTS.md guidance and pauses before touching protected areas."
+      ]
+    },
+    {
+      "id": "examples",
+      "kind": "examples",
+      "title": "Examples and fixtures lane",
+      "rationale": "Examples are most useful when they evolve separately from core implementation paths like examples/**, fixtures/**, README.md, docs/**.",
+      "branchName": "lane/fixture-cli-app-examples",
+      "allowedPaths": [
+        "examples/**",
+        "fixtures/**",
+        "README.md",
+        "docs/**"
+      ],
+      "stopBeforeTouchingPaths": [
+        "AGENTS.md",
+        "bun.lockb",
+        "package-lock.json",
+        "pnpm-lock.yaml",
+        "src/**",
+        "yarn.lock"
+      ],
+      "checks": [
+        "npm run smoke",
+        "manual example walkthrough"
+      ],
+      "acceptanceCriteria": [
+        "Examples reflect real supported workflows.",
+        "Fixtures stay small, deterministic, and easy to inspect.",
+        "Changes stay local-first: no telemetry, no hidden network activity, no surprise shell execution.",
+        "The lane respects AGENTS.md guidance and pauses before touching protected areas."
+      ]
+    },
+    {
+      "id": "tests",
+      "kind": "tests",
+      "title": "Test coverage lane",
+      "rationale": "Test and fixture work can stay isolated to test/**, tests/**, __tests__/**, fixtures/**, package.json while protecting implementation files.",
+      "branchName": "lane/fixture-cli-app-tests",
+      "allowedPaths": [
+        "test/**",
+        "tests/**",
+        "__tests__/**",
+        "fixtures/**",
+        "package.json"
+      ],
+      "stopBeforeTouchingPaths": [
+        "AGENTS.md",
+        "bun.lockb",
+        "package-lock.json",
+        "pnpm-lock.yaml",
+        "src/**",
+        "yarn.lock"
+      ],
+      "checks": [
+        "npm run check",
+        "npm test"
+      ],
+      "acceptanceCriteria": [
+        "Coverage demonstrates the target workflow or edge case.",
+        "Fixtures and assertions are deterministic.",
+        "Tests fail for the right reason before the fix and pass afterward.",
+        "The lane respects AGENTS.md guidance and pauses before touching protected areas."
+      ]
+    }
+  ]
+}
