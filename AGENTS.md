@@ -5,10 +5,10 @@ This file defines how AI agents and human maintainers should work in `agentlane`
 ## Project Context
 
 - Project: `agentlane`
-- Repository: ``
-- Primary maintainer: ``
-- Default branch: ``
-- Package manager: ``
+- Repository: `https://github.com/rogerchappel/agentlane`
+- Primary maintainer: `Roger Chappel`
+- Default branch: `main`
+- Package manager: `npm`
 - Primary verification command: `bash scripts/validate.sh`
 
 ## Core Principle
@@ -17,8 +17,8 @@ Move quickly, but keep every change reviewable, reversible, verifiable, and safe
 
 ## Branch Policy
 
-- Work on a branch for all repository changes.
-- Branch from the latest `` before editing.
+- Work on a branch for all repository changes unless the maintainer explicitly asks for direct-to-main work.
+- Branch from the latest `main` before editing.
 - Do not merge without explicit maintainer approval.
 - Do not rewrite shared history unless explicitly instructed.
 
@@ -73,7 +73,6 @@ Use the smallest relevant check first:
 - targeted unit test
 - targeted integration test
 - typecheck
-- lint
 - build
 - smoke command
 - manual documentation review
@@ -101,57 +100,6 @@ Human decision needed:
 Next recommended task:
 ```
 
-## PR Body Formatting Gate
-
-When opening or updating a pull request, the PR body must follow `.github/pull_request_template.md` unless the maintainer explicitly asks for a different format.
-
-Do not pass PR bodies or review comments as shell strings containing escaped newlines like `\n`. GitHub will render those literally and the comment is not reviewable.
-
-Use a body file or heredoc instead:
-
-```bash
-cat > /tmp/pr-body.md <<'EOF'
-## Summary
-
--
-
-## Verification
-
-- [ ] Tests or checks run:
-- [ ] Manual review completed:
-
-## Risk Level
-
-- [ ] Low
-- [ ] Medium
-- [ ] High
-
-Notes:
-
-## Rollback Plan
-
--
-
-## Human Decision Needed
-
-- [ ] None
-- [ ] Maintainer review
-- [ ] Product/design decision
-- [ ] Security/privacy review
-- [ ] Other:
-EOF
-
-gh pr create --body-file /tmp/pr-body.md
-```
-
-Before creating or updating a PR, inspect the final rendered source:
-
-```bash
-cat /tmp/pr-body.md
-```
-
-If the preview contains literal `\n`, missing headings, or does not match the repository template, fix it before posting.
-
 ## Safety Rules
 
 Stop and ask before touching:
@@ -173,4 +121,7 @@ Never commit secrets. Never mutate production data unless explicitly instructed.
 
 ## Repository-Specific Notes
 
-
+- `agentlane` must stay local-first and deterministic.
+- New features should prefer explicit output over automation side effects.
+- Keep fixtures small enough to inspect in a diff.
+- If you widen a lane's allowed paths, explain why in the commit or PR summary.
