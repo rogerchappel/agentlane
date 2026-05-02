@@ -1,38 +1,35 @@
 # Roadmap
 
-This roadmap describes intended direction, not a binding delivery promise.
-Review it regularly and update it as the project learns from users,
-contributors, and implementation constraints.
+This roadmap describes intended direction, not a delivery promise.
 
 ## Now
 
-- Define the smallest useful project scope.
-- Keep repository setup, documentation, and verification easy for contributors
-  to follow.
-- Ship small, reviewable improvements.
+- Validate the `agentlane plan` MVP against more real-world repositories.
+- Tighten path heuristics where lanes still overlap too easily.
+- Improve examples so humans and agents can adopt the tool quickly.
 
 ## Next
 
-- Add the next capabilities that directly support the project's primary users.
-- Improve tests, docs, and examples around the most used workflows.
-- Reduce setup friction discovered during early use.
+- Add configurable path ignore rules.
+- Support richer lane annotations from `AGENTS.md`.
+- Offer machine-readable confidence and collision signals.
 
 ## Later
 
-- Consider larger features after the core workflow is stable.
-- Add automation only where it removes repeated maintainer work.
-- Revisit packaging, deployment, or integration options based on real demand.
+- Explore a `diff` mode for comparing two lane plans.
+- Consider optional worktree hints once the planner output is stable.
+- Add publish-time packaging polish after real user feedback.
 
 ## Not Planned
 
-- Unrelated platform rewrites without a clear migration path.
-- Mandatory dependencies on a single ecosystem unless the project requires it.
-- Public release dates before maintainers are ready to commit to them.
+- autonomous agent dispatch
+- hidden telemetry or cloud scoring
+- surprise shell execution for repo inspection
 
 ## Roadmap Review
 
-Before each major or meaningful minor release:
+Before each meaningful release:
 
-- Move completed user-visible work into `CHANGELOG.md`.
-- Remove stale commitments.
-- Promote only the next reviewable set of work into `Now`.
+- move completed user-visible work into `CHANGELOG.md`
+- remove stale commitments
+- promote only the next reviewable slice into `Now`
