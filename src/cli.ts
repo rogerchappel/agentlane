@@ -6,6 +6,8 @@ import { createPlan } from './plan-builder.js';
 import { renderPlanJson } from './json.js';
 import { renderPlanMarkdown } from './markdown.js';
 
+const CLI_VERSION = '0.1.0';
+
 interface CliOptions {
   rootDir: string;
   format: 'markdown' | 'json';
@@ -22,7 +24,7 @@ export async function run(argv = process.argv.slice(2)): Promise<number> {
   }
 
   if (command === '--version' || command === '-v') {
-    process.stdout.write('0.1.0\n');
+    process.stdout.write(`${CLI_VERSION}\n`);
     return 0;
   }
 
@@ -93,7 +95,8 @@ function parsePlanArgs(args: string[]): CliOptions {
     }
 
     if (token === '--help' || token === '-h') {
-      throw new Error(renderPlanHelp());
+      process.stdout.write(renderPlanHelp());
+      process.exit(0);
     }
 
     if (token.startsWith('-')) {
