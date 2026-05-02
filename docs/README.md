@@ -2,6 +2,7 @@
 
 - [`PRD.md`](./PRD.md) — product framing and V1 scope
 - [`TASKS.md`](./TASKS.md) — delivery waves for the MVP
+- [`USAGE.md`](./USAGE.md) — practical command patterns
 - [`ORCHESTRATION.md`](./ORCHESTRATION.md) — repo execution rules and publish gates
 - [`orchestration.json`](./orchestration.json) — machine-readable orchestration contract
 
