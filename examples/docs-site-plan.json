@@ -1,0 +1,4 @@
+{
+  "command": "agentlane plan fixtures/repos/docs-site --json",
+  "note": "This fixture shows a docs-first repo with a separate CI lane."
+}
