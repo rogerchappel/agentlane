@@ -1,5 +1,6 @@
 import path from 'node:path';
 
+import { extractProtectedPathHints } from './agents.js';
 import { readTextIfExists, walkRepo } from './fs.js';
 import type { RepoFacts } from './types.js';
 
@@ -29,7 +30,8 @@ export async function detectRepoFacts(rootDir: string, agentsPath?: string): Pro
     hasAgentsFile: agentsGuidance !== undefined,
     ...(agentsGuidance !== undefined ? { agentsGuidance } : {}),
     scripts: packageJson?.scripts ?? {},
-    hasNodeProject: packageJson !== undefined
+    hasNodeProject: packageJson !== undefined,
+    protectedPathHints: extractProtectedPathHints(agentsGuidance)
   };
 }
 

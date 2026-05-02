@@ -100,7 +100,7 @@ function lanePathsForKind(facts: RepoFacts, kind: LaneKind): { allowed: string[]
   const releasePaths = ['CHANGELOG.md', 'package.json', '.github/**', 'README.md'];
   const corePaths = ['src/**', 'package.json', 'tsconfig.json'];
 
-  const stop = new Set<string>(DEFAULT_STOP_PATHS);
+  const stop = new Set<string>([...DEFAULT_STOP_PATHS, ...facts.protectedPathHints]);
   if (facts.hasAgentsFile) {
     stop.add('AGENTS.md');
   }

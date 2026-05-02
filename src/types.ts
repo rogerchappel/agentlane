@@ -18,6 +18,7 @@ export interface RepoFacts {
   agentsGuidance?: string;
   scripts: Record<string, string>;
   hasNodeProject: boolean;
+  protectedPathHints: string[];
 }
 
 export interface Lane {
