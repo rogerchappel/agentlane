@@ -2,42 +2,67 @@
 
 Thanks for helping improve `agentlane`.
 
-This project values small, reviewable contributions with clear verification.
+This project values small, reviewable contributions with clear verification and conservative safety defaults.
+
+## Before you start
+
+- Read [`AGENTS.md`](./AGENTS.md) for repo-specific working rules.
+- Prefer one reviewable intent per pull request.
+- Keep changes local-first and deterministic.
+
+## Good first contributions
+
+- tighten lane heuristics for real repos
+- add fixture repos that expose planner blind spots
+- improve CLI copy or docs clarity
+- strengthen tests around edge cases and collisions
 
 ## Issues
 
 Before opening an issue:
 
-- Search existing issues.
-- Confirm the issue applies to `agentlane`.
-- Include enough context for maintainers to understand or reproduce the request.
+- search existing issues
+- confirm the issue applies to `agentlane`
+- include enough context for maintainers to understand the use case
 
 Bug reports should include:
 
-- What happened.
-- What you expected.
-- Steps to reproduce.
-- Relevant logs, screenshots, or files.
-- The smallest verification step that demonstrates the issue.
+- what happened
+- what you expected
+- steps to reproduce
+- the smallest verification step that demonstrates the issue
 
 Feature requests should include:
 
-- The use case.
-- Why the current project does not solve it.
-- Risks or compatibility concerns.
-- Suggested files or behavior that may need to change.
+- the use case
+- why the current planner output is insufficient
+- risks or compatibility concerns
+- suggested files or behavior that may need to change
 
 ## Pull Requests
 
 Pull requests should:
 
-- Focus on one reviewable intent.
-- Use a branch.
-- Follow Conventional Commits.
-- Include tests or verification appropriate to the change.
-- Update documentation when behavior or usage changes.
-- Avoid unrelated formatting or dependency churn.
-- Avoid secrets, private contact details, and project-specific sensitive information.
+- focus on one reviewable intent
+- use Conventional Commits
+- include tests or verification appropriate to the change
+- update docs when behavior or usage changes
+- avoid unrelated formatting or dependency churn
+- avoid secrets, private contact details, and sensitive repo data
+
+## Verification
+
+Run the smallest checks that cover your change:
+
+```sh
+npm test
+npm run check
+npm run build
+npm run smoke
+bash scripts/validate.sh
+```
+
+If you cannot run a check, explain why and provide the exact command maintainers should run.
 
 ## Review Pack
 
@@ -45,7 +70,7 @@ Use this format for meaningful changes:
 
 ```md
 ## Review Pack
-Repo:
+Repo: agentlane
 Branch:
 PR:
 Task:
@@ -59,21 +84,3 @@ Rollback plan:
 Human decision needed:
 Next recommended task:
 ```
-
-## Verification
-
-Every contribution should include verification.
-
-Examples:
-
-- Documentation: inspect rendered Markdown or review the diff.
-- Tests: run the targeted test command.
-- Types: run the project typecheck.
-- Build: run the smallest build command that covers the change.
-- Manual QA: provide exact steps and observed result.
-
-If verification cannot be run, explain why and provide the exact command maintainers should run.
-
-## Maintainer Review
-
-Maintainers may request narrower scope, clearer verification, additional tests, or safer defaults before merging.
