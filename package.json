@@ -25,7 +25,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "check": "tsc -p tsconfig.json --noEmit",
-    "test": "node --test --enable-source-maps",
+    "test": "npm run build && node --test test/**/*.test.js",
     "smoke": "npm run build && node scripts/smoke.mjs"
   },
   "repository": {
@@ -46,6 +46,7 @@
   },
   "homepage": "https://github.com/rogerchappel/agentlane#readme",
   "devDependencies": {
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "@types/node": "^24.9.1"
   }
 }
