@@ -1,11 +1,24 @@
 ## Summary
 
--
+- what changed
+- why this is the smallest useful slice
 
 ## Verification
 
-- [ ] Tests or checks run:
-- [ ] Manual review completed:
+- [ ] `npm test`
+- [ ] `npm run check`
+- [ ] `npm run build`
+- [ ] `npm run smoke`
+- [ ] `bash scripts/validate.sh`
+- [ ] manual review completed
+
+## Lane Planning Impact
+
+- [ ] no planner behavior change
+- [ ] planner heuristics changed
+- [ ] output format changed
+- [ ] fixtures or snapshots updated
+- [ ] docs/examples updated
 
 ## Risk Level
 
@@ -13,16 +26,16 @@
 - [ ] Medium
 - [ ] High
 
-Notes:
-
 ## Rollback Plan
 
--
+- commit(s) to revert:
+- state or files that need follow-up cleanup:
 
 ## Human Decision Needed
 
 - [ ] None
-- [ ] Maintainer review
+- [ ] Maintainer review only
 - [ ] Product/design decision
 - [ ] Security/privacy review
+- [ ] Release timing decision
 - [ ] Other:
