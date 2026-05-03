@@ -68,11 +68,15 @@ Each lane includes:
 
 ## Safety stance
 
+`agentlane` is a traffic cone, not an autopilot: it marks safe lanes so agents can move without clipping each other.
+
 - Local-first and deterministic
 - Reads files from disk only
 - Never executes repo code to infer lanes
 - Never phones home
 - Treats `AGENTS.md` as a signal to stay conservative
+
+See [SAFETY.md](SAFETY.md) for the full safety model.
 
 ## Examples
 
