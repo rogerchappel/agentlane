@@ -16,8 +16,10 @@
   },
   "files": [
     "dist",
+    "src",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "SAFETY.md"
   ],
   "engines": {
     "node": ">=20"
@@ -26,7 +28,8 @@
     "build": "tsc -p tsconfig.json",
     "check": "tsc -p tsconfig.json --noEmit",
     "test": "npm run build && node --test test/**/*.test.js",
-    "smoke": "npm run build && node scripts/smoke.mjs"
+    "smoke": "npm run build && node scripts/smoke.mjs",
+    "prepack": "npm run build"
   },
   "repository": {
     "type": "git",
