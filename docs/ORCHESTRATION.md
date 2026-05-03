@@ -1,12 +1,12 @@
 # ORCHESTRATION: agentlane
 
 Owner: one isolated project sub-agent.
-Workspace: /Users/roger/Developer/my-opensource/agentlane only.
+Workspace: isolated worktree under /Users/roger/Developer/my-opensource/_worktrees for factory changes; main checkout remains untouched.
 
 ## Rules
 - Do not edit another project or oss-ideas from this repo agent.
-- Work directly in this newly scaffolded repo; it has no established main checkout history yet.
-- Commit frequently and atomically to main.
+- Work in an isolated git worktree and push verified commits back to `main`.
+- Commit frequently and atomically; push the verified HEAD to `main`.
 - Keep the project local-first and deterministic.
 - Never publish secrets, telemetry, or surprise network calls.
 
