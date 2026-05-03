@@ -10,5 +10,6 @@ export function fixtureRepo(name) {
 }
 
 export async function readExpected(name) {
-  return readFile(path.join(repoRoot, 'test', 'fixtures', 'expected', name), 'utf8');
+  const snapshot = await readFile(path.join(repoRoot, 'test', 'fixtures', 'expected', name), 'utf8');
+  return snapshot.replaceAll('/Users/roger/Developer/my-opensource/agentlane', repoRoot);
 }

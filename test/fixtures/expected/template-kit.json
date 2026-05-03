@@ -7,7 +7,7 @@
     "inputRoot": "/Users/roger/Developer/my-opensource/agentlane/fixtures/repos/template-kit",
     "signals": [
       "files:4",
-      "directories:2",
+      "directories:1",
       "lanes:2",
       "package-manager:npm"
     ]
