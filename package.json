@@ -29,7 +29,8 @@
     "check": "tsc -p tsconfig.json --noEmit",
     "test": "npm run build && node --test test/**/*.test.js",
     "smoke": "npm run build && node scripts/smoke.mjs",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "release:check": "npm run check && npm test && npm run smoke && npm pack --dry-run"
   },
   "repository": {
     "type": "git",
