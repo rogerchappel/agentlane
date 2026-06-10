@@ -19,7 +19,10 @@
     "src",
     "README.md",
     "LICENSE",
-    "SAFETY.md"
+    "SAFETY.md",
+    "SECURITY.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md"
   ],
   "engines": {
     "node": ">=20"
