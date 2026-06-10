@@ -101,9 +101,13 @@ npm test
 npm run check
 npm run build
 npm run smoke
+npm run package:smoke
 npm run release:check
 bash scripts/validate.sh
 ```
+
+`npm run release:check` runs the TypeScript check, compiled tests, fixture
+smoke test, and npm pack dry-run used for release-candidate review.
 
 ## Roadmap
 
