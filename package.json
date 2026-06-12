@@ -22,7 +22,8 @@
     "SAFETY.md",
     "SECURITY.md",
     "CHANGELOG.md",
-    "CONTRIBUTING.md"
+    "CONTRIBUTING.md",
+    "CODE_OF_CONDUCT.md"
   ],
   "engines": {
     "node": ">=20"
@@ -32,7 +33,7 @@
     "check": "tsc -p tsconfig.json --noEmit",
     "test": "npm run build && node --test test/**/*.test.js",
     "smoke": "npm run build && node scripts/smoke.mjs",
-    "package:smoke": "npm pack --dry-run",
+    "package:smoke": "npm run build && npm pack --dry-run",
     "prepack": "npm run build",
     "release:check": "npm run check && npm test && npm run smoke && npm run package:smoke"
   },
