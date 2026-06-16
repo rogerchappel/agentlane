@@ -4,6 +4,7 @@ export type LaneKind =
   | 'cli'
   | 'ci'
   | 'examples'
+  | 'dependencies'
   | 'release'
   | 'core';
 

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { createPlan, renderPlanJson, renderPlanMarkdown } from '../dist/index.js';
+import { buildLanes, createPlan, renderPlanJson, renderPlanMarkdown } from '../dist/index.js';
 import { fixtureRepo, readExpected } from './helpers.js';
 
 const NOW = new Date('2026-05-02T08:00:00.000Z');
@@ -30,4 +30,24 @@ test('falls back to docs and tests lanes when signals are sparse', async () => {
     ['docs', 'release']
   );
   assert.equal(renderPlanJson(plan), await readExpected('template-kit.json'));
+});
+
+test('suggests a dependency lane for node repos with lockfiles', () => {
+  const lanes = buildLanes({
+    rootDir: '/tmp/repo',
+    repoName: 'repo',
+    packageName: 'repo',
+    packageManager: 'npm',
+    files: ['package.json', 'package-lock.json', 'src/index.ts'],
+    directories: ['src'],
+    hasAgentsFile: false,
+    scripts: { test: 'node --test' },
+    hasNodeProject: true,
+    protectedPathHints: []
+  }, true);
+
+  const dependencyLane = lanes.find((lane) => lane.kind === 'dependencies');
+  assert.ok(dependencyLane);
+  assert.deepEqual(dependencyLane.allowedPaths, ['package.json', 'package-lock.json']);
+  assert.ok(dependencyLane.stopBeforeTouchingPaths.includes('src/**'));
 });

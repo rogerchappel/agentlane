@@ -57,6 +57,9 @@ function suggestLaneKinds(facts: RepoFacts): LaneKind[] {
   if (facts.files.some((file) => file.startsWith('examples/') || file.startsWith('example/'))) {
     suggestions.add('examples');
   }
+  if (facts.hasNodeProject && facts.files.some((file) => DEFAULT_STOP_PATHS.includes(file))) {
+    suggestions.add('dependencies');
+  }
   if (facts.files.some((file) => file.startsWith('src/cli') || file === 'bin/agentlane' || file === 'src/cli.ts')) {
     suggestions.add('cli');
   }
@@ -97,6 +100,7 @@ function lanePathsForKind(facts: RepoFacts, kind: LaneKind): { allowed: string[]
   const cliPaths = ['src/cli.ts', 'src/**/*.ts', 'bin/**', 'package.json'];
   const ciPaths = ['.github/**', 'scripts/**', 'package.json'];
   const examplePaths = ['examples/**', 'fixtures/**', 'README.md', 'docs/**'];
+  const dependencyPaths = ['package.json', 'package-lock.json', 'pnpm-lock.yaml', 'yarn.lock', 'bun.lockb'];
   const releasePaths = ['CHANGELOG.md', 'package.json', '.github/**', 'README.md'];
   const corePaths = ['src/**', 'package.json', 'tsconfig.json'];
 
@@ -125,6 +129,10 @@ function lanePathsForKind(facts: RepoFacts, kind: LaneKind): { allowed: string[]
     case 'examples':
       stop.add('src/**');
       return { allowed: filterExistingPaths(facts, examplePaths, true), stop: uniqueSorted(stop) };
+    case 'dependencies':
+      stop.add('src/**');
+      stop.add('.github/**');
+      return { allowed: filterExistingPaths(facts, dependencyPaths), stop: uniqueSorted(stop) };
     case 'release':
       stop.add('src/**');
       return { allowed: filterExistingPaths(facts, releasePaths), stop: uniqueSorted(stop) };
@@ -167,6 +175,8 @@ function laneChecksForKind(facts: RepoFacts, kind: LaneKind): string[] {
       return ['bash scripts/validate.sh'];
     case 'examples':
       return ['npm run smoke', 'manual example walkthrough'];
+    case 'dependencies':
+      return uniqueSorted(['npm install --package-lock-only', 'npm test', 'npm run build']);
     case 'release':
       return uniqueSorted(['npm test', 'npm run build', 'bash scripts/validate.sh']);
     case 'core':
@@ -216,6 +226,13 @@ function laneAcceptanceForKind(facts: RepoFacts, kind: LaneKind): string[] {
         localFirstLine,
         agentsLine
       ];
+    case 'dependencies':
+      return [
+        'Dependency changes are limited to package metadata and lockfiles.',
+        'Lockfile updates are reproducible from the documented package manager.',
+        'No install script or postinstall side effect is introduced without review.',
+        agentsLine
+      ];
     case 'release':
       return [
         'Release metadata matches the actual shipped behavior.',
@@ -245,6 +262,8 @@ function laneTitle(kind: LaneKind): string {
       return 'CI and verification lane';
     case 'examples':
       return 'Examples and fixtures lane';
+    case 'dependencies':
+      return 'Dependency maintenance lane';
     case 'release':
       return 'Release readiness lane';
     case 'core':
@@ -265,6 +284,8 @@ function laneRationale(facts: RepoFacts, kind: LaneKind, scopedPaths: { allowed:
       return `Automation and contributor checks are concentrated in ${pathHint}, which makes CI work easy to review.`;
     case 'examples':
       return `Examples are most useful when they evolve separately from core implementation paths like ${pathHint}.`;
+    case 'dependencies':
+      return `Dependency maintenance can stay isolated to ${pathHint} while implementation and CI lanes continue independently.`;
     case 'release':
       return `Release metadata lives in ${pathHint}, which is a natural lane for changelog and packaging work.`;
     case 'core':
