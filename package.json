@@ -16,8 +16,13 @@
   },
   "files": [
     "dist",
+    "docs",
+    "examples",
+    "fixtures",
     "src",
+    "AGENTS.md",
     "README.md",
+    "ROADMAP.md",
     "LICENSE",
     "SAFETY.md",
     "SECURITY.md",
@@ -33,7 +38,7 @@
     "check": "tsc -p tsconfig.json --noEmit",
     "test": "npm run build && node --test test/**/*.test.js",
     "smoke": "npm run build && node scripts/smoke.mjs",
-    "package:smoke": "npm run build && npm pack --dry-run",
+    "package:smoke": "npm run build && node scripts/pack-smoke.mjs",
     "prepack": "npm run build",
     "release:check": "npm run check && npm test && npm run smoke && npm run package:smoke"
   },

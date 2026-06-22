@@ -107,13 +107,13 @@ bash scripts/validate.sh
 ```
 
 `npm run release:check` runs the TypeScript check, compiled tests, fixture
-smoke test, and npm pack dry-run used for release-candidate review.
+smoke test, and package-surface smoke used for release-candidate review.
 
 ## Package contents
 
-The npm package allowlist includes the compiled runtime, source, and public
-support documents: `README.md`, `LICENSE`, `SAFETY.md`, `SECURITY.md`,
-`CHANGELOG.md`, `CONTRIBUTING.md`, and `CODE_OF_CONDUCT.md`.
+The npm package allowlist includes the compiled runtime, source, docs, examples,
+fixtures, and public support documents: `README.md`, `LICENSE`, `SAFETY.md`,
+`SECURITY.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, and `CODE_OF_CONDUCT.md`.
 
 Run `npm run package:smoke` before publishing to confirm those files and the
 compiled CLI are present in the tarball.
