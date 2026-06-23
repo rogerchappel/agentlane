@@ -16,10 +16,19 @@
   },
   "files": [
     "dist",
+    "docs",
+    "examples",
+    "fixtures",
     "src",
+    "AGENTS.md",
     "README.md",
+    "ROADMAP.md",
     "LICENSE",
-    "SAFETY.md"
+    "SAFETY.md",
+    "SECURITY.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "CODE_OF_CONDUCT.md"
   ],
   "engines": {
     "node": ">=20"
@@ -29,7 +38,9 @@
     "check": "tsc -p tsconfig.json --noEmit",
     "test": "npm run build && node --test test/**/*.test.js",
     "smoke": "npm run build && node scripts/smoke.mjs",
-    "prepack": "npm run build"
+    "package:smoke": "npm run build && node scripts/pack-smoke.mjs",
+    "prepack": "npm run build",
+    "release:check": "npm run check && npm test && npm run smoke && npm run package:smoke"
   },
   "repository": {
     "type": "git",
