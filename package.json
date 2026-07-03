@@ -40,7 +40,8 @@
     "smoke": "npm run build && node scripts/smoke.mjs",
     "package:smoke": "npm run build && node scripts/pack-smoke.mjs",
     "prepack": "npm run build",
-    "release:check": "npm run check && npm test && npm run smoke && npm run package:smoke"
+    "release:check": "npm run check && npm test && npm run smoke && npm run package:smoke",
+    "lint": "npm run check"
   },
   "repository": {
     "type": "git",
@@ -60,7 +61,7 @@
   },
   "homepage": "https://github.com/rogerchappel/agentlane#readme",
   "devDependencies": {
-    "typescript": "^5.9.3",
-    "@types/node": "^24.9.1"
+    "@types/node": "^24.9.1",
+    "typescript": "^5.9.3"
   }
 }
