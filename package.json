@@ -61,7 +61,7 @@
   },
   "homepage": "https://github.com/rogerchappel/agentlane#readme",
   "devDependencies": {
-    "@types/node": "^24.9.1",
+    "@types/node": "^26.1.1",
     "typescript": "^5.9.3"
   }
 }
