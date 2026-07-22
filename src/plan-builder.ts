@@ -16,7 +16,7 @@ export async function createPlan(options: PlanOptions): Promise<PlanResult> {
       repoName: facts.packageName ?? facts.repoName,
       packageManager: facts.packageManager,
       laneCount: lanes.length,
-      generatedAt: (options.now ?? new Date()).toISOString(),
+      ...(options.now ? { generatedAt: options.now.toISOString() } : {}),
       inputRoot: path.resolve(options.rootDir),
       signals
     },

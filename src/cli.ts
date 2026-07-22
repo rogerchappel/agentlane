@@ -12,6 +12,7 @@ interface CliOptions {
   rootDir: string;
   format: 'markdown' | 'json';
   includeCoreLane: boolean;
+  includeGeneratedAt: boolean;
   agentsPath?: string;
 }
 
@@ -38,7 +39,8 @@ export async function run(argv = process.argv.slice(2)): Promise<number> {
     const plan = await createPlan({
       rootDir: options.rootDir,
       ...(options.agentsPath ? { agentsPath: options.agentsPath } : {}),
-      includeCoreLane: options.includeCoreLane
+      includeCoreLane: options.includeCoreLane,
+      ...(options.includeGeneratedAt ? { now: new Date() } : {})
     });
 
     const output = options.format === 'json' ? renderPlanJson(plan) : renderPlanMarkdown(plan);
@@ -55,6 +57,7 @@ function parsePlanArgs(args: string[]): CliOptions {
   let rootDir = '.';
   let format: CliOptions['format'] = 'markdown';
   let includeCoreLane = true;
+  let includeGeneratedAt = false;
   let agentsPath: string | undefined;
 
   for (let index = 0; index < args.length; index += 1) {
@@ -84,6 +87,11 @@ function parsePlanArgs(args: string[]): CliOptions {
       continue;
     }
 
+    if (token === '--generated-at') {
+      includeGeneratedAt = true;
+      continue;
+    }
+
     if (token === '--agents') {
       const next = args[index + 1];
       if (!next) {
@@ -110,6 +118,7 @@ function parsePlanArgs(args: string[]): CliOptions {
     rootDir: path.resolve(rootDir),
     format,
     includeCoreLane,
+    includeGeneratedAt,
     ...(agentsPath ? { agentsPath } : {})
   };
 }
@@ -125,7 +134,7 @@ function renderBanner(): string {
 function renderPlanHelp(): string {
   return [
     'Usage:',
-    '  agentlane plan [path] [--json] [--format markdown|json] [--agents ./AGENTS.md] [--no-core]',
+    '  agentlane plan [path] [--json] [--format markdown|json] [--agents ./AGENTS.md] [--no-core] [--generated-at]',
     '',
     'Examples:',
     '  agentlane plan .',
@@ -135,7 +144,8 @@ function renderPlanHelp(): string {
     'Notes:',
     '  - Reads repository files from disk only.',
     '  - Never shells out or calls the network.',
-    '  - Emits deterministic Markdown or JSON lane plans.'
+    '  - Emits deterministic Markdown or JSON lane plans.',
+    '  - Adds the current time only when --generated-at is passed.'
   ].join('\n') + '\n';
 }
 

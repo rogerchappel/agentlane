@@ -38,7 +38,7 @@ export interface PlanSummary {
   repoName: string;
   packageManager: RepoFacts['packageManager'];
   laneCount: number;
-  generatedAt: string;
+  generatedAt?: string;
   inputRoot: string;
   signals: string[];
 }
