@@ -27,6 +27,28 @@ test('emits json for a fixture repo', () => {
   );
 });
 
+test('emits byte-identical output for unchanged input', () => {
+  for (const formatArgs of [[], ['--json']]) {
+    const args = [cliPath, 'plan', fixtureRepo('cli-app'), ...formatArgs];
+    const first = spawnSync(process.execPath, args, { encoding: 'utf8' });
+    const second = spawnSync(process.execPath, args, { encoding: 'utf8' });
+
+    assert.equal(first.status, 0);
+    assert.equal(second.status, 0);
+    assert.equal(second.stdout, first.stdout);
+  }
+});
+
+test('adds a generation timestamp only when requested', () => {
+  const deterministic = spawnSync(process.execPath, [cliPath, 'plan', fixtureRepo('docs-site'), '--json'], { encoding: 'utf8' });
+  const timestamped = spawnSync(process.execPath, [cliPath, 'plan', fixtureRepo('docs-site'), '--json', '--generated-at'], { encoding: 'utf8' });
+
+  assert.equal(deterministic.status, 0);
+  assert.equal(timestamped.status, 0);
+  assert.equal(JSON.parse(deterministic.stdout).summary.generatedAt, undefined);
+  assert.match(JSON.parse(timestamped.stdout).summary.generatedAt, /^\d{4}-\d{2}-\d{2}T/);
+});
+
 test('fails on unknown flags', () => {
   const result = spawnSync(process.execPath, [cliPath, 'plan', '--wat'], { encoding: 'utf8' });
 
