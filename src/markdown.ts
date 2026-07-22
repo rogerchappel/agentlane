@@ -8,7 +8,9 @@ export function renderPlanMarkdown(plan: PlanResult): string {
   lines.push(`- Package manager: \`${plan.summary.packageManager}\``);
   lines.push(`- Lanes: **${plan.summary.laneCount}**`);
   lines.push(`- Signals: ${plan.summary.signals.join(', ')}`);
-  lines.push(`- Generated at: \`${plan.summary.generatedAt}\``);
+  if (plan.summary.generatedAt) {
+    lines.push(`- Generated at: \`${plan.summary.generatedAt}\``);
+  }
   lines.push('');
 
   for (const lane of plan.lanes) {
