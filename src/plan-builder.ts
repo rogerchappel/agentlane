@@ -161,26 +161,49 @@ function filterExistingPaths(facts: RepoFacts, candidates: string[], keepWhenMis
 }
 
 function laneChecksForKind(facts: RepoFacts, kind: LaneKind): string[] {
-  const shared = ['npm test', 'npm run build'];
-  const checkScript = facts.scripts.check ? ['npm run check'] : ['npm run build'];
+  const run = (script: string): string => packageScriptCommand(facts.packageManager, script);
+  const shared = [run('test'), run('build')];
+  const checkScript = facts.scripts.check ? [run('check')] : [run('build')];
 
   switch (kind) {
     case 'docs':
       return ['bash scripts/validate.sh', 'manual markdown review'];
     case 'tests':
-      return uniqueSorted(['npm test', ...checkScript]);
+      return uniqueSorted([run('test'), ...checkScript]);
     case 'cli':
-      return uniqueSorted(['npm run build', 'npm run smoke', 'node dist/cli.js plan --help']);
+      return uniqueSorted([run('build'), run('smoke'), 'node dist/cli.js plan --help']);
     case 'ci':
       return ['bash scripts/validate.sh'];
     case 'examples':
-      return ['npm run smoke', 'manual example walkthrough'];
+      return [run('smoke'), 'manual example walkthrough'];
     case 'dependencies':
-      return uniqueSorted(['npm install --package-lock-only', 'npm test', 'npm run build']);
+      return uniqueSorted([lockfileUpdateCommand(facts.packageManager), run('test'), run('build')]);
     case 'release':
-      return uniqueSorted(['npm test', 'npm run build', 'bash scripts/validate.sh']);
+      return uniqueSorted([run('test'), run('build'), 'bash scripts/validate.sh']);
     case 'core':
       return uniqueSorted([...shared, ...checkScript]);
+  }
+}
+
+function packageScriptCommand(packageManager: RepoFacts['packageManager'], script: string): string {
+  if (packageManager === 'npm' || packageManager === 'unknown') {
+    return script === 'test' ? 'npm test' : `npm run ${script}`;
+  }
+
+  return `${packageManager} run ${script}`;
+}
+
+function lockfileUpdateCommand(packageManager: RepoFacts['packageManager']): string {
+  switch (packageManager) {
+    case 'pnpm':
+      return 'pnpm install --lockfile-only';
+    case 'yarn':
+      return 'yarn install';
+    case 'bun':
+      return 'bun install --lockfile-only';
+    case 'npm':
+    case 'unknown':
+      return 'npm install --package-lock-only';
   }
 }
 
