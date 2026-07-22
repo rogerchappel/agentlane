@@ -1,5 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
 
 import { buildLanes, createPlan, renderPlanJson, renderPlanMarkdown } from '../dist/index.js';
 import { fixtureRepo, readExpected } from './helpers.js';
@@ -50,4 +53,35 @@ test('suggests a dependency lane for node repos with lockfiles', () => {
   assert.ok(dependencyLane);
   assert.deepEqual(dependencyLane.allowedPaths, ['package.json', 'package-lock.json']);
   assert.ok(dependencyLane.stopBeforeTouchingPaths.includes('src/**'));
+});
+
+test('uses the detected package manager for lane checks', async (t) => {
+  const rootDir = await mkdtemp(path.join(os.tmpdir(), 'agentlane-package-managers-'));
+  t.after(() => rm(rootDir, { recursive: true, force: true }));
+
+  const cases = [
+    ['npm', 'package-lock.json', ['npm install --package-lock-only', 'npm run build', 'npm test']],
+    ['pnpm', 'pnpm-lock.yaml', ['pnpm install --lockfile-only', 'pnpm run build', 'pnpm run test']],
+    ['yarn', 'yarn.lock', ['yarn install', 'yarn run build', 'yarn run test']],
+    ['bun', 'bun.lockb', ['bun install --lockfile-only', 'bun run build', 'bun run test']]
+  ];
+
+  for (const [packageManager, lockfile, expectedChecks] of cases) {
+    const fixtureDir = path.join(rootDir, packageManager);
+    await mkdir(fixtureDir);
+    await writeFile(path.join(fixtureDir, 'package.json'), JSON.stringify({
+      name: `${packageManager}-fixture`,
+      scripts: { build: 'tsc', test: 'node --test' }
+    }));
+    await writeFile(path.join(fixtureDir, lockfile), '');
+
+    const plan = await createPlan({ rootDir: fixtureDir, now: NOW });
+
+    assert.equal(plan.summary.packageManager, packageManager);
+    const dependencyLane = plan.lanes.find((lane) => lane.kind === 'dependencies');
+    assert.ok(dependencyLane, `${packageManager} should produce a dependency lane`);
+    assert.deepEqual(dependencyLane.checks, expectedChecks);
+    assert.ok(dependencyLane.allowedPaths.includes(lockfile));
+    assert.equal(dependencyLane.checks.some((check) => /^(npm|pnpm|yarn|bun) /.test(check) && !check.startsWith(packageManager)), false);
+  }
 });
