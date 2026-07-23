@@ -4,7 +4,7 @@ import { detectRepoFacts } from './detect.js';
 import { uniqueSorted } from './fs.js';
 import type { Lane, LaneKind, PlanOptions, PlanResult, RepoFacts } from './types.js';
 
-const DEFAULT_STOP_PATHS = ['package-lock.json', 'pnpm-lock.yaml', 'yarn.lock', 'bun.lockb'];
+const DEFAULT_STOP_PATHS = ['package-lock.json', 'pnpm-lock.yaml', 'yarn.lock', 'bun.lock', 'bun.lockb'];
 
 export async function createPlan(options: PlanOptions): Promise<PlanResult> {
   const facts = await detectRepoFacts(options.rootDir, options.agentsPath);
@@ -100,7 +100,7 @@ function lanePathsForKind(facts: RepoFacts, kind: LaneKind): { allowed: string[]
   const cliPaths = ['src/cli.ts', 'src/**/*.ts', 'bin/**', 'package.json'];
   const ciPaths = ['.github/**', 'scripts/**', 'package.json'];
   const examplePaths = ['examples/**', 'fixtures/**', 'README.md', 'docs/**'];
-  const dependencyPaths = ['package.json', 'package-lock.json', 'pnpm-lock.yaml', 'yarn.lock', 'bun.lockb'];
+  const dependencyPaths = ['package.json', ...DEFAULT_STOP_PATHS];
   const releasePaths = ['CHANGELOG.md', 'package.json', '.github/**', 'README.md'];
   const corePaths = ['src/**', 'package.json', 'tsconfig.json'];
 
@@ -161,27 +161,52 @@ function filterExistingPaths(facts: RepoFacts, candidates: string[], keepWhenMis
 }
 
 function laneChecksForKind(facts: RepoFacts, kind: LaneKind): string[] {
-  const run = (script: string): string => packageScriptCommand(facts.packageManager, script);
-  const shared = [run('test'), run('build')];
-  const checkScript = facts.scripts.check ? [run('check')] : [run('build')];
+  const runIfPresent = (script: string): string[] =>
+    facts.hasNodeProject && facts.scripts[script]
+      ? [packageScriptCommand(facts.packageManager, script)]
+      : [];
+  const validate = facts.files.includes('scripts/validate.sh') ? ['bash scripts/validate.sh'] : [];
+  const docsValidation = facts.files.includes('scripts/check-links.sh')
+    ? ['bash scripts/check-links.sh']
+    : validate;
+  const testOrManual = [...runIfPresent('test'), ...(facts.scripts.test ? [] : ['manual test review'])];
+  const buildOrManual = [
+    ...runIfPresent('check'),
+    ...(!facts.scripts.check ? runIfPresent('build') : []),
+    ...(!facts.scripts.check && !facts.scripts.build ? ['manual source review'] : [])
+  ];
 
   switch (kind) {
     case 'docs':
-      return ['bash scripts/validate.sh', 'manual markdown review'];
+      return uniqueSorted([...docsValidation, 'manual markdown review']);
     case 'tests':
-      return uniqueSorted([run('test'), ...checkScript]);
+      return uniqueSorted([...testOrManual, ...buildOrManual]);
     case 'cli':
-      return uniqueSorted([run('build'), run('smoke'), 'node dist/cli.js plan --help']);
+      return uniqueSorted([
+        ...runIfPresent('build'),
+        ...runIfPresent('smoke'),
+        ...(!facts.scripts.build && !facts.scripts.smoke ? ['manual CLI walkthrough'] : [])
+      ]);
     case 'ci':
-      return ['bash scripts/validate.sh'];
+      return validate.length ? validate : ['manual workflow syntax review'];
     case 'examples':
-      return [run('smoke'), 'manual example walkthrough'];
+      return uniqueSorted([...runIfPresent('smoke'), 'manual example walkthrough']);
     case 'dependencies':
-      return uniqueSorted([lockfileUpdateCommand(facts.packageManager), run('test'), run('build')]);
+      return uniqueSorted([
+        lockfileUpdateCommand(facts.packageManager),
+        ...runIfPresent('test'),
+        ...runIfPresent('build'),
+        ...(!facts.scripts.test && !facts.scripts.build ? ['manual dependency diff review'] : [])
+      ]);
     case 'release':
-      return uniqueSorted([run('test'), run('build'), 'bash scripts/validate.sh']);
+      return uniqueSorted([
+        ...runIfPresent('test'),
+        ...runIfPresent('build'),
+        ...validate,
+        ...(!facts.scripts.test && !facts.scripts.build && !validate.length ? ['manual release checklist review'] : [])
+      ]);
     case 'core':
-      return uniqueSorted([...shared, ...checkScript]);
+      return uniqueSorted([...testOrManual, ...buildOrManual]);
   }
 }
 

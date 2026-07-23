@@ -24,6 +24,7 @@
         "CHANGELOG.md"
       ],
       "stopBeforeTouchingPaths": [
+        "bun.lock",
         "bun.lockb",
         "package-lock.json",
         "pnpm-lock.yaml",
@@ -31,7 +32,6 @@
         "yarn.lock"
       ],
       "checks": [
-        "bash scripts/validate.sh",
         "manual markdown review"
       ],
       "acceptanceCriteria": [
@@ -52,6 +52,7 @@
         "README.md"
       ],
       "stopBeforeTouchingPaths": [
+        "bun.lock",
         "bun.lockb",
         "package-lock.json",
         "pnpm-lock.yaml",
@@ -59,9 +60,7 @@
         "yarn.lock"
       ],
       "checks": [
-        "bash scripts/validate.sh",
-        "npm run build",
-        "npm test"
+        "manual release checklist review"
       ],
       "acceptanceCriteria": [
         "Release metadata matches the actual shipped behavior.",
