@@ -29,13 +29,13 @@
       "stopBeforeTouchingPaths": [
         ".github/**",
         "AGENTS.md",
+        "bun.lock",
         "bun.lockb",
         "package-lock.json",
         "pnpm-lock.yaml",
         "yarn.lock"
       ],
       "checks": [
-        "npm run build",
         "npm run check",
         "npm test"
       ],
@@ -58,6 +58,7 @@
       ],
       "stopBeforeTouchingPaths": [
         "AGENTS.md",
+        "bun.lock",
         "bun.lockb",
         "package-lock.json",
         "pnpm-lock.yaml",
@@ -65,7 +66,7 @@
         "yarn.lock"
       ],
       "checks": [
-        "bash scripts/validate.sh"
+        "manual workflow syntax review"
       ],
       "acceptanceCriteria": [
         "Automation is explicit, reviewable, and safe to run in forks.",
@@ -89,13 +90,13 @@
       "stopBeforeTouchingPaths": [
         ".github/**",
         "AGENTS.md",
+        "bun.lock",
         "bun.lockb",
         "package-lock.json",
         "pnpm-lock.yaml",
         "yarn.lock"
       ],
       "checks": [
-        "node dist/cli.js plan --help",
         "npm run build",
         "npm run smoke"
       ],
@@ -117,6 +118,7 @@
       ],
       "stopBeforeTouchingPaths": [
         "AGENTS.md",
+        "bun.lock",
         "bun.lockb",
         "package-lock.json",
         "pnpm-lock.yaml",
@@ -124,7 +126,6 @@
         "yarn.lock"
       ],
       "checks": [
-        "bash scripts/validate.sh",
         "manual markdown review"
       ],
       "acceptanceCriteria": [
@@ -148,6 +149,7 @@
       ],
       "stopBeforeTouchingPaths": [
         "AGENTS.md",
+        "bun.lock",
         "bun.lockb",
         "package-lock.json",
         "pnpm-lock.yaml",
@@ -155,8 +157,8 @@
         "yarn.lock"
       ],
       "checks": [
-        "npm run smoke",
-        "manual example walkthrough"
+        "manual example walkthrough",
+        "npm run smoke"
       ],
       "acceptanceCriteria": [
         "Examples reflect real supported workflows.",
@@ -180,6 +182,7 @@
       ],
       "stopBeforeTouchingPaths": [
         "AGENTS.md",
+        "bun.lock",
         "bun.lockb",
         "package-lock.json",
         "pnpm-lock.yaml",
