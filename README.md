@@ -94,6 +94,11 @@ agentlane plan fixtures/repos/docs-site --json
 
 See [`examples/`](examples/) and [`fixtures/`](fixtures/) for concrete inputs.
 
+Plan checks are derived from repository facts. Package-manager commands are
+included only for scripts declared in `package.json`, and shell validators are
+included only when the referenced file exists. When no supported automated
+check is detected, the plan names an explicit manual review instead.
+
 ## Development
 
 ```sh
