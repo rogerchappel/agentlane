@@ -10,6 +10,7 @@ test("semver tag releases publish the inspected tarball before announcing it", a
 
   assert.match(workflow, /push:\s*\n\s*tags:\s*\n\s*- 'v\*\.\*\.\*'/);
   assert.match(workflow, /permissions:[\s\S]*id-token: write/);
+  assert.match(workflow, /npm install --global npm@11\.5\.1/);
   assert.match(workflow, /npm run release:check/);
   assert.match(workflow, /npm pack --json > npm-pack\.json/);
   assert.match(workflow, /filename=.*npm-pack\.json/);

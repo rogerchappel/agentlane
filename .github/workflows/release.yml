@@ -24,6 +24,8 @@ jobs:
           node-version: 22
           cache: npm
           registry-url: https://registry.npmjs.org
+      - name: Install npm with trusted publishing support
+        run: npm install --global npm@11.5.1
       - run: npm ci
       - run: npm run release:check
       - name: Build package tarball
