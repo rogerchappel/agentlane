@@ -26,7 +26,14 @@ jobs:
           registry-url: https://registry.npmjs.org
       - run: npm ci
       - run: npm run release:check
-      - run: npm pack
+      - name: Build package tarball
+        id: package
+        run: |
+          npm pack --json > npm-pack.json
+          filename="$(node -e "const fs = require('node:fs'); const [pack] = JSON.parse(fs.readFileSync('npm-pack.json', 'utf8')); if (!pack?.filename) process.exit(1); process.stdout.write(pack.filename)")"
+          echo "filename=${filename}" >> "$GITHUB_OUTPUT"
+      - name: Publish package to npm
+        run: npm publish "${{ steps.package.outputs.filename }}" --access public --provenance
       - name: Generate release notes
         run: |
           if ! npm run --silent release:notes --if-present -- . > RELEASE_NOTES.md || [ ! -s RELEASE_NOTES.md ]; then
@@ -36,4 +43,4 @@ jobs:
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "${GITHUB_REF_NAME}" --notes-file RELEASE_NOTES.md *.tgz
+        run: gh release create "${GITHUB_REF_NAME}" --notes-file RELEASE_NOTES.md "${{ steps.package.outputs.filename }}"
