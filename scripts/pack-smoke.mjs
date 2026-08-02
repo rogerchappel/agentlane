@@ -40,6 +40,19 @@ if (missing.length > 0) {
 }
 
 const packageJson = JSON.parse(await readFile("package.json", "utf8"));
+if (pack.name !== packageJson.name || pack.version !== packageJson.version) {
+  console.error("agentlane package smoke failed; packed identity does not match package.json.");
+  process.exit(1);
+}
+
+const expectedFilename = `${packageJson.name}-${packageJson.version}.tgz`;
+if (pack.filename !== expectedFilename || packageJson.name !== "agentlane") {
+  console.error(
+    `agentlane package smoke failed; expected installable package agentlane in ${expectedFilename}.`
+  );
+  process.exit(1);
+}
+
 if (packageJson.bin?.agentlane !== "./dist/cli.js") {
   console.error("agentlane package smoke failed; expected agentlane bin in package metadata.");
   process.exit(1);
