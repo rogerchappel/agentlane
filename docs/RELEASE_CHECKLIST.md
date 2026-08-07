@@ -2,6 +2,11 @@
 
 Use this checklist before publishing or announcing AgentLane.
 
+The current public artifact is the `agentlane-0.1.0.tgz` attachment on GitHub
+release `v0.1.0`; the package is not yet published to npm. Keep
+[`publication-state.json`](publication-state.json) synchronized with the real
+publication state and the README installation command.
+
 1. Install dependencies with `npm ci`.
 2. Run `npm run release:check`.
 3. Run `bash scripts/validate.sh`.
@@ -20,7 +25,9 @@ Trusted publishers can only be configured after the package exists on npm. For
 the first publication, a maintainer must publish `agentlane` manually with an
 npm account that has the required 2FA, then configure the publisher before the
 next tag-driven release. Confirm the package version is still available before
-any manual bootstrap publication.
+any manual bootstrap publication. After npm confirms the public package,
+change `npm.published` in `publication-state.json` to `true` and replace the
+README tarball command with `npm install agentlane` in the same pull request.
 
 ## Release order and recovery
 
@@ -36,3 +43,7 @@ for another package version: download and inspect the immutable npm package,
 then create the matching GitHub release from that tarball and the generated
 notes. Never create the GitHub release first, because that would advertise a
 version that users cannot install.
+
+The existing `v0.1.0` GitHub release predates this ordering guarantee and has a
+working tarball but no npm publication. Do not describe that historical release
+as npm-installable. Apply the npm-first order to the next release.

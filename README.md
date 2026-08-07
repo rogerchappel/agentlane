@@ -18,9 +18,18 @@ Parallel agents only help when they stop stepping on each other. `agentlane plan
 
 ## Install
 
+The `agentlane` package is not published to npm yet. Install the verified
+tarball attached to the current GitHub release instead:
+
 ```sh
-npm install agentlane
+npm install https://github.com/rogerchappel/agentlane/releases/download/v0.1.0/agentlane-0.1.0.tgz
 ```
+
+This installs the `agentlane` executable into `node_modules/.bin`. The
+maintained publication state and release tarball URL live in
+[`docs/publication-state.json`](docs/publication-state.json); the registry
+command will return here only after that metadata records a completed npm
+publication.
 
 For local development in this repo:
 

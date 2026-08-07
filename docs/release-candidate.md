@@ -23,6 +23,7 @@ node /Users/roger/Developer/my-opensource/releasebox/bin/releasebox.js check .
 - Node test suite gate is present.
 - CLI smoke test gate is present.
 - npm packaging dry-run gate is present.
+- README/publication-state consistency gate is present.
 - releasebox project config is present with reviewed release mode.
 
 ## Readiness run summary
@@ -34,4 +35,8 @@ Last local readiness run for this PR:
 - `bash scripts/validate.sh` — pass
 - `node /Users/roger/Developer/my-opensource/releasebox/bin/releasebox.js check .` — pass
 
-No release-readiness blockers are currently known.
+The current GitHub release tarball is installable, but `agentlane` is not yet
+published to npm. That is a known distribution blocker for a registry install,
+not a package-build failure. Until the first npm publication is complete, the
+README intentionally points to the GitHub release tarball and
+`docs/publication-state.json` records npm as unpublished.
