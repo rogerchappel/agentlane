@@ -147,6 +147,8 @@ function renderPlanHelp(): string {
     '  agentlane plan ../some-repo --format markdown',
     '',
     'Notes:',
+    '  - Accepts at most one repository path; the default is the current directory.',
+    '  - Requires --agents to be followed by a file path, not another option.',
     '  - Reads repository files from disk only.',
     '  - Never shells out or calls the network.',
     '  - Emits deterministic Markdown or JSON lane plans.',
