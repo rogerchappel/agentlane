@@ -55,6 +55,7 @@ export async function run(argv = process.argv.slice(2)): Promise<number> {
 
 function parsePlanArgs(args: string[]): CliOptions {
   let rootDir = '.';
+  let hasRootDir = false;
   let format: CliOptions['format'] = 'markdown';
   let includeCoreLane = true;
   let includeGeneratedAt = false;
@@ -94,7 +95,7 @@ function parsePlanArgs(args: string[]): CliOptions {
 
     if (token === '--agents') {
       const next = args[index + 1];
-      if (!next) {
+      if (!next || next.startsWith('-')) {
         throw new Error('Expected a path after --agents');
       }
       agentsPath = next;
@@ -111,7 +112,11 @@ function parsePlanArgs(args: string[]): CliOptions {
       throw new Error(`Unknown flag: ${token}`);
     }
 
+    if (hasRootDir) {
+      throw new Error('Expected at most one repository path');
+    }
     rootDir = token;
+    hasRootDir = true;
   }
 
   return {
