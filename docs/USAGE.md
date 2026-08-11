@@ -23,3 +23,5 @@ agentlane plan ../repo --agents ../repo/AGENTS.md
 ```
 
 This is useful when the repo keeps agent guidance outside the default root path.
+
+The `plan` command accepts at most one repository path and defaults to the current directory when it is omitted. `--agents` requires a following file path; another option cannot be used as its value.

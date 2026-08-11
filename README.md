@@ -52,6 +52,8 @@ agentlane plan ../some-repo --agents ./AGENTS.md
 agentlane plan [path] [--json] [--format markdown|json] [--agents ./AGENTS.md] [--no-core]
 ```
 
+Pass at most one repository path; when omitted, `agentlane` uses the current directory. `--agents` must be followed by the path to an AGENTS file and cannot be followed by another option.
+
 ### Output model
 
 Each lane includes:
