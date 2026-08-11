@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { fixtureRepo } from './helpers.js';
@@ -54,4 +55,32 @@ test('fails on unknown flags', () => {
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /Unknown flag: --wat/);
+});
+
+test('fails when more than one repository path is provided', () => {
+  const result = spawnSync(
+    process.execPath,
+    [cliPath, 'plan', fixtureRepo('cli-app'), fixtureRepo('docs-site'), '--json'],
+    { encoding: 'utf8' }
+  );
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /agentlane: Expected at most one repository path/);
+});
+
+test('fails when --agents is followed by an option', () => {
+  const result = spawnSync(process.execPath, [cliPath, 'plan', fixtureRepo('cli-app'), '--agents', '--json'], { encoding: 'utf8' });
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /agentlane: Expected a path after --agents/);
+});
+
+test('accepts a single repository path and an explicit AGENTS file', () => {
+  const rootDir = fixtureRepo('cli-app');
+  const result = spawnSync(process.execPath, [cliPath, 'plan', rootDir, '--agents', path.join(rootDir, 'AGENTS.md'), '--json'], {
+    encoding: 'utf8'
+  });
+
+  assert.equal(result.status, 0);
+  assert.equal(JSON.parse(result.stdout).summary.repoName, 'fixture-cli-app');
 });
