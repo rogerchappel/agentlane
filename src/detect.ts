@@ -1,4 +1,6 @@
 import path from 'node:path';
+import { access, readFile, stat } from 'node:fs/promises';
+import { constants } from 'node:fs';
 
 import { extractProtectedPathHints } from './agents.js';
 import { readTextIfExists, walkRepo } from './fs.js';
@@ -18,7 +20,9 @@ export async function detectRepoFacts(rootDir: string, agentsPath?: string): Pro
     : undefined;
 
   const resolvedAgentsPath = agentsPath ? path.resolve(rootDir, agentsPath) : path.join(rootDir, 'AGENTS.md');
-  const agentsGuidance = await readTextIfExists(resolvedAgentsPath);
+  const agentsGuidance = agentsPath
+    ? await readExplicitAgentsFile(resolvedAgentsPath)
+    : await readTextIfExists(resolvedAgentsPath);
 
   return {
     rootDir,
@@ -33,6 +37,19 @@ export async function detectRepoFacts(rootDir: string, agentsPath?: string): Pro
     hasNodeProject: packageJson !== undefined,
     protectedPathHints: extractProtectedPathHints(agentsGuidance)
   };
+}
+
+async function readExplicitAgentsFile(filePath: string): Promise<string> {
+  try {
+    const fileStats = await stat(filePath);
+    if (!fileStats.isFile()) {
+      throw new Error('not a regular file');
+    }
+    await access(filePath, constants.R_OK);
+    return await readFile(filePath, 'utf8');
+  } catch {
+    throw new Error(`Explicit --agents path is not a readable file: ${filePath}`);
+  }
 }
 
 function detectPackageManager(files: string[]): RepoFacts['packageManager'] {

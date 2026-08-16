@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
+import { chmodSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -75,7 +77,58 @@ test('fails when --agents is followed by an option', () => {
   assert.match(result.stderr, /agentlane: Expected a path after --agents/);
 });
 
-test('accepts a single repository path and an explicit AGENTS file', () => {
+test('fails when an explicit AGENTS path is missing', () => {
+  const rootDir = fixtureRepo('cli-app');
+  const missingPath = path.join(rootDir, 'DOES-NOT-EXIST.md');
+  const result = spawnSync(process.execPath, [cliPath, 'plan', rootDir, '--agents', missingPath, '--json'], {
+    encoding: 'utf8'
+  });
+
+  assert.equal(result.status, 1);
+  assert.equal(result.stdout, '');
+  assert.equal(result.stderr, `agentlane: Explicit --agents path is not a readable file: ${missingPath}\n`);
+});
+
+test('fails when an explicit AGENTS path is not a regular file', () => {
+  const rootDir = fixtureRepo('cli-app');
+  const result = spawnSync(process.execPath, [cliPath, 'plan', rootDir, '--agents', rootDir, '--json'], {
+    encoding: 'utf8'
+  });
+
+  assert.equal(result.status, 1);
+  assert.equal(result.stderr, `agentlane: Explicit --agents path is not a readable file: ${rootDir}\n`);
+});
+
+test('fails when an explicit AGENTS path is unreadable', () => {
+  const rootDir = mkdtempSync(path.join(os.tmpdir(), 'agentlane-unreadable-'));
+  const agentsPath = path.join(rootDir, 'PRIVATE.md');
+  writeFileSync(agentsPath, 'Do not edit secrets.\n');
+  chmodSync(agentsPath, 0o000);
+
+  try {
+    const result = spawnSync(process.execPath, [cliPath, 'plan', rootDir, '--agents', agentsPath, '--json'], {
+      encoding: 'utf8'
+    });
+
+    assert.equal(result.status, 1);
+    assert.equal(result.stderr, `agentlane: Explicit --agents path is not a readable file: ${agentsPath}\n`);
+  } finally {
+    chmodSync(agentsPath, 0o600);
+    rmSync(rootDir, { recursive: true, force: true });
+  }
+});
+
+test('accepts an explicit AGENTS path relative to the repository root', () => {
+  const rootDir = fixtureRepo('cli-app');
+  const result = spawnSync(process.execPath, [cliPath, 'plan', rootDir, '--agents', 'AGENTS.md', '--json'], {
+    encoding: 'utf8'
+  });
+
+  assert.equal(result.status, 0);
+  assert.equal(JSON.parse(result.stdout).summary.repoName, 'fixture-cli-app');
+});
+
+test('accepts an absolute explicit AGENTS path', () => {
   const rootDir = fixtureRepo('cli-app');
   const result = spawnSync(process.execPath, [cliPath, 'plan', rootDir, '--agents', path.join(rootDir, 'AGENTS.md'), '--json'], {
     encoding: 'utf8'
