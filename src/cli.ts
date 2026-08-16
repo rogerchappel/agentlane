@@ -148,7 +148,7 @@ function renderPlanHelp(): string {
     '',
     'Notes:',
     '  - Accepts at most one repository path; the default is the current directory.',
-    '  - Requires --agents to be followed by a file path, not another option.',
+    '  - Requires --agents to name a readable regular file; relative paths resolve from the repository root.',
     '  - Reads repository files from disk only.',
     '  - Never shells out or calls the network.',
     '  - Emits deterministic Markdown or JSON lane plans.',

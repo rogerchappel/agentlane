@@ -52,7 +52,7 @@ agentlane plan ../some-repo --agents ./AGENTS.md
 agentlane plan [path] [--json] [--format markdown|json] [--agents ./AGENTS.md] [--no-core]
 ```
 
-Pass at most one repository path; when omitted, `agentlane` uses the current directory. `--agents` must be followed by the path to an AGENTS file and cannot be followed by another option.
+Pass at most one repository path; when omitted, `agentlane` uses the current directory. `--agents` must name a readable regular file and cannot be followed by another option. Relative `--agents` paths resolve from the repository root. A missing, unreadable, or non-file explicit path exits nonzero and names the invalid path; the default `AGENTS.md` remains optional when `--agents` is omitted.
 
 ### Output model
 
