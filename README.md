@@ -105,6 +105,13 @@ agentlane plan fixtures/repos/docs-site --json
 
 See [`examples/`](examples/) and [`fixtures/`](fixtures/) for concrete inputs.
 
+Suggested lanes have exclusive write ownership. When candidate scopes overlap,
+the earlier lane in the generated plan owns the shared path and every other
+lane lists that scope under `Stop before touching`. This applies to exact paths
+such as `package.json` and parent/child globs such as `src/**` and
+`src/**/*.ts`, so two concurrent workers are never authorized to edit the same
+path.
+
 Plan checks are derived from repository facts. Package-manager commands are
 included only for scripts declared in `package.json`, and shell validators are
 included only when the referenced file exists. When no supported automated

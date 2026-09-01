@@ -2,13 +2,13 @@
   "summary": {
     "repoName": "template-kit",
     "packageManager": "npm",
-    "laneCount": 2,
+    "laneCount": 1,
     "generatedAt": "2026-05-02T08:00:00.000Z",
     "inputRoot": "/Users/roger/Developer/my-opensource/agentlane/fixtures/repos/template-kit",
     "signals": [
       "files:4",
       "directories:1",
-      "lanes:2",
+      "lanes:1",
       "package-manager:npm"
     ]
   },
@@ -38,34 +38,6 @@
         "Docs clearly describe the relevant workflow and match current CLI behavior.",
         "Examples and command snippets are copy-pasteable.",
         "Changes stay local-first: no telemetry, no hidden network activity, no surprise shell execution.",
-        "If an AGENTS.md file appears later, re-run planning before changing protected areas."
-      ]
-    },
-    {
-      "id": "release",
-      "kind": "release",
-      "title": "Release readiness lane",
-      "rationale": "Release metadata lives in CHANGELOG.md, README.md, which is a natural lane for changelog and packaging work.",
-      "branchName": "lane/template-kit-release",
-      "allowedPaths": [
-        "CHANGELOG.md",
-        "README.md"
-      ],
-      "stopBeforeTouchingPaths": [
-        "bun.lock",
-        "bun.lockb",
-        "package-lock.json",
-        "pnpm-lock.yaml",
-        "src/**",
-        "yarn.lock"
-      ],
-      "checks": [
-        "manual release checklist review"
-      ],
-      "acceptanceCriteria": [
-        "Release metadata matches the actual shipped behavior.",
-        "Changelog and package metadata are consistent.",
-        "Any publish step remains explicit and human-approved.",
         "If an AGENTS.md file appears later, re-run planning before changing protected areas."
       ]
     }

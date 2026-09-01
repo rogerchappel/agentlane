@@ -29,10 +29,18 @@
       "stopBeforeTouchingPaths": [
         ".github/**",
         "AGENTS.md",
+        "README.md",
+        "__tests__/**",
+        "bin/**",
         "bun.lock",
         "bun.lockb",
+        "docs/**",
+        "examples/**",
+        "fixtures/**",
         "package-lock.json",
         "pnpm-lock.yaml",
+        "test/**",
+        "tests/**",
         "yarn.lock"
       ],
       "checks": [
@@ -53,16 +61,25 @@
       "rationale": "Automation and contributor checks are concentrated in .github/**, package.json, which makes CI work easy to review.",
       "branchName": "lane/fixture-cli-app-ci",
       "allowedPaths": [
-        ".github/**",
-        "package.json"
+        ".github/**"
       ],
       "stopBeforeTouchingPaths": [
         "AGENTS.md",
+        "README.md",
+        "__tests__/**",
+        "bin/**",
         "bun.lock",
         "bun.lockb",
+        "docs/**",
+        "examples/**",
+        "fixtures/**",
         "package-lock.json",
+        "package.json",
         "pnpm-lock.yaml",
         "src/**",
+        "test/**",
+        "tests/**",
+        "tsconfig.json",
         "yarn.lock"
       ],
       "checks": [
@@ -82,18 +99,25 @@
       "rationale": "This repo exposes a command-line entrypoint, so CLI ergonomics should stay scoped to src/cli.ts, src/**/*.ts, bin/**, package.json.",
       "branchName": "lane/fixture-cli-app-cli",
       "allowedPaths": [
-        "src/cli.ts",
-        "src/**/*.ts",
-        "bin/**",
-        "package.json"
+        "bin/**"
       ],
       "stopBeforeTouchingPaths": [
         ".github/**",
         "AGENTS.md",
+        "README.md",
+        "__tests__/**",
         "bun.lock",
         "bun.lockb",
+        "docs/**",
+        "examples/**",
+        "fixtures/**",
         "package-lock.json",
+        "package.json",
         "pnpm-lock.yaml",
+        "src/**",
+        "test/**",
+        "tests/**",
+        "tsconfig.json",
         "yarn.lock"
       ],
       "checks": [
@@ -117,12 +141,22 @@
         "README.md"
       ],
       "stopBeforeTouchingPaths": [
+        ".github/**",
         "AGENTS.md",
+        "__tests__/**",
+        "bin/**",
         "bun.lock",
         "bun.lockb",
+        "docs/**",
+        "examples/**",
+        "fixtures/**",
         "package-lock.json",
+        "package.json",
         "pnpm-lock.yaml",
         "src/**",
+        "test/**",
+        "tests/**",
+        "tsconfig.json",
         "yarn.lock"
       ],
       "checks": [
@@ -144,16 +178,23 @@
       "allowedPaths": [
         "examples/**",
         "fixtures/**",
-        "README.md",
         "docs/**"
       ],
       "stopBeforeTouchingPaths": [
+        ".github/**",
         "AGENTS.md",
+        "README.md",
+        "__tests__/**",
+        "bin/**",
         "bun.lock",
         "bun.lockb",
         "package-lock.json",
+        "package.json",
         "pnpm-lock.yaml",
         "src/**",
+        "test/**",
+        "tests/**",
+        "tsconfig.json",
         "yarn.lock"
       ],
       "checks": [
@@ -176,17 +217,23 @@
       "allowedPaths": [
         "test/**",
         "tests/**",
-        "__tests__/**",
-        "fixtures/**",
-        "package.json"
+        "__tests__/**"
       ],
       "stopBeforeTouchingPaths": [
+        ".github/**",
         "AGENTS.md",
+        "README.md",
+        "bin/**",
         "bun.lock",
         "bun.lockb",
+        "docs/**",
+        "examples/**",
+        "fixtures/**",
         "package-lock.json",
+        "package.json",
         "pnpm-lock.yaml",
         "src/**",
+        "tsconfig.json",
         "yarn.lock"
       ],
       "checks": [
