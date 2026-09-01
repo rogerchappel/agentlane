@@ -35,7 +35,40 @@ export function buildLanes(facts: RepoFacts, includeCoreLane: boolean): Lane[] {
     lanes.push(buildLane(facts, kind));
   }
 
-  return lanes;
+  return assignExclusivePaths(lanes);
+}
+
+function assignExclusivePaths(lanes: Lane[]): Lane[] {
+  const claimed: string[] = [];
+
+  const assigned = lanes.map((lane) => {
+    const allowedPaths = lane.allowedPaths.filter(
+      (candidate) => !claimed.some((existing) => pathsOverlap(existing, candidate))
+    );
+    claimed.push(...allowedPaths);
+    return { ...lane, allowedPaths };
+  });
+
+  return assigned.filter((lane) => lane.allowedPaths.length > 0).map((lane) => {
+    const otherAllowed = assigned
+      .filter((other) => other.id !== lane.id && other.allowedPaths.length > 0)
+      .flatMap((other) => other.allowedPaths);
+    const stopBeforeTouchingPaths = uniqueSorted([...lane.stopBeforeTouchingPaths, ...otherAllowed])
+      .filter((stopPath) => !lane.allowedPaths.some((allowedPath) => pathsOverlap(stopPath, allowedPath)));
+
+    return { ...lane, stopBeforeTouchingPaths };
+  });
+}
+
+export function pathsOverlap(left: string, right: string): boolean {
+  const leftRoot = globRoot(left);
+  const rightRoot = globRoot(right);
+  return leftRoot === rightRoot || leftRoot.startsWith(`${rightRoot}/`) || rightRoot.startsWith(`${leftRoot}/`);
+}
+
+function globRoot(pattern: string): string {
+  const wildcard = pattern.search(/[?*[]/);
+  return (wildcard === -1 ? pattern : pattern.slice(0, wildcard)).replace(/\/$/, '');
 }
 
 function shouldAddCoreLane(facts: RepoFacts): boolean {

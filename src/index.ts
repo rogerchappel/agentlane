@@ -1,5 +1,5 @@
 export { extractProtectedPathHints } from './agents.js';
-export { createPlan, buildLanes } from './plan-builder.js';
+export { createPlan, buildLanes, pathsOverlap } from './plan-builder.js';
 export { renderPlanMarkdown } from './markdown.js';
 export { renderPlanJson } from './json.js';
 export { detectRepoFacts } from './detect.js';

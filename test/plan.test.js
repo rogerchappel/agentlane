@@ -4,7 +4,7 @@ import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
-import { buildLanes, createPlan, renderPlanJson, renderPlanMarkdown } from '../dist/index.js';
+import { buildLanes, createPlan, pathsOverlap, renderPlanJson, renderPlanMarkdown } from '../dist/index.js';
 import { fixtureRepo, readExpected } from './helpers.js';
 
 const NOW = new Date('2026-05-02T08:00:00.000Z');
@@ -16,6 +16,28 @@ test('plans a CLI-oriented repo deterministically', async () => {
 
   assert.equal(markdown, await readExpected('cli-app.md'));
   assert.equal(json, await readExpected('cli-app.json'));
+
+  for (const [index, lane] of plan.lanes.entries()) {
+    for (const other of plan.lanes.slice(index + 1)) {
+      assert.equal(
+        lane.allowedPaths.some((left) => other.allowedPaths.some((right) => pathsOverlap(left, right))),
+        false,
+        `${lane.id} and ${other.id} must have exclusive write scopes`
+      );
+    }
+    assert.equal(
+      lane.allowedPaths.some((allowed) => lane.stopBeforeTouchingPaths.some((stop) => pathsOverlap(allowed, stop))),
+      false,
+      `${lane.id} must not stop before touching its own write scope`
+    );
+  }
+});
+
+test('detects exact and parent-child glob collisions', () => {
+  assert.equal(pathsOverlap('package.json', 'package.json'), true);
+  assert.equal(pathsOverlap('src/**', 'src/**/*.ts'), true);
+  assert.equal(pathsOverlap('src/**/*.ts', 'src/cli.ts'), true);
+  assert.equal(pathsOverlap('fixtures/**', 'examples/**'), false);
 });
 
 test('plans a docs-oriented repo conservatively', async () => {
@@ -30,7 +52,7 @@ test('falls back to docs and tests lanes when signals are sparse', async () => {
 
   assert.deepEqual(
     plan.lanes.map((lane) => lane.kind),
-    ['docs', 'release']
+    ['docs']
   );
   assert.equal(renderPlanJson(plan), await readExpected('template-kit.json'));
 });
@@ -51,7 +73,7 @@ test('suggests a dependency lane for node repos with lockfiles', () => {
 
   const dependencyLane = lanes.find((lane) => lane.kind === 'dependencies');
   assert.ok(dependencyLane);
-  assert.deepEqual(dependencyLane.allowedPaths, ['package.json', 'package-lock.json']);
+  assert.deepEqual(dependencyLane.allowedPaths, ['package-lock.json']);
   assert.ok(dependencyLane.stopBeforeTouchingPaths.includes('src/**'));
 });
 
@@ -147,7 +169,7 @@ test('only emits automated checks supported by repository facts', async (t) => {
 
     if (fixture.name === 'bun') {
       assert.equal(plan.summary.packageManager, 'bun');
-      assert.ok(plan.lanes.every((lane) => lane.stopBeforeTouchingPaths.includes('bun.lock')));
+      assert.ok(plan.lanes.filter((lane) => lane.kind !== 'dependencies').every((lane) => lane.stopBeforeTouchingPaths.includes('bun.lock')));
       assert.ok(plan.lanes.find((lane) => lane.kind === 'dependencies')?.allowedPaths.includes('bun.lock'));
     }
   }
