@@ -12,7 +12,7 @@
 - Branch: `lane/fixture-cli-app-core`
 - Rationale: Implementation-heavy work belongs in src/**, package.json, tsconfig.json while other lanes avoid those files.
 - Allowed paths: `src/**`, `package.json`, `tsconfig.json`
-- Stop before touching: `.github/**`, `AGENTS.md`, `bun.lock`, `bun.lockb`, `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`
+- Stop before touching: `.github/**`, `AGENTS.md`, `README.md`, `__tests__/**`, `bin/**`, `bun.lock`, `bun.lockb`, `docs/**`, `examples/**`, `fixtures/**`, `package-lock.json`, `pnpm-lock.yaml`, `test/**`, `tests/**`, `yarn.lock`
 
 ### Checks
 - npm run check
@@ -29,8 +29,8 @@
 - Kind: `ci`
 - Branch: `lane/fixture-cli-app-ci`
 - Rationale: Automation and contributor checks are concentrated in .github/**, package.json, which makes CI work easy to review.
-- Allowed paths: `.github/**`, `package.json`
-- Stop before touching: `AGENTS.md`, `bun.lock`, `bun.lockb`, `package-lock.json`, `pnpm-lock.yaml`, `src/**`, `yarn.lock`
+- Allowed paths: `.github/**`
+- Stop before touching: `AGENTS.md`, `README.md`, `__tests__/**`, `bin/**`, `bun.lock`, `bun.lockb`, `docs/**`, `examples/**`, `fixtures/**`, `package-lock.json`, `package.json`, `pnpm-lock.yaml`, `src/**`, `test/**`, `tests/**`, `tsconfig.json`, `yarn.lock`
 
 ### Checks
 - manual workflow syntax review
@@ -46,8 +46,8 @@
 - Kind: `cli`
 - Branch: `lane/fixture-cli-app-cli`
 - Rationale: This repo exposes a command-line entrypoint, so CLI ergonomics should stay scoped to src/cli.ts, src/**/*.ts, bin/**, package.json.
-- Allowed paths: `src/cli.ts`, `src/**/*.ts`, `bin/**`, `package.json`
-- Stop before touching: `.github/**`, `AGENTS.md`, `bun.lock`, `bun.lockb`, `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`
+- Allowed paths: `bin/**`
+- Stop before touching: `.github/**`, `AGENTS.md`, `README.md`, `__tests__/**`, `bun.lock`, `bun.lockb`, `docs/**`, `examples/**`, `fixtures/**`, `package-lock.json`, `package.json`, `pnpm-lock.yaml`, `src/**`, `test/**`, `tests/**`, `tsconfig.json`, `yarn.lock`
 
 ### Checks
 - npm run build
@@ -65,7 +65,7 @@
 - Branch: `lane/fixture-cli-app-docs`
 - Rationale: The repo already has docs-oriented content, so a docs lane can move quickly inside README.md.
 - Allowed paths: `README.md`
-- Stop before touching: `AGENTS.md`, `bun.lock`, `bun.lockb`, `package-lock.json`, `pnpm-lock.yaml`, `src/**`, `yarn.lock`
+- Stop before touching: `.github/**`, `AGENTS.md`, `__tests__/**`, `bin/**`, `bun.lock`, `bun.lockb`, `docs/**`, `examples/**`, `fixtures/**`, `package-lock.json`, `package.json`, `pnpm-lock.yaml`, `src/**`, `test/**`, `tests/**`, `tsconfig.json`, `yarn.lock`
 
 ### Checks
 - manual markdown review
@@ -81,8 +81,8 @@
 - Kind: `examples`
 - Branch: `lane/fixture-cli-app-examples`
 - Rationale: Examples are most useful when they evolve separately from core implementation paths like examples/**, fixtures/**, README.md, docs/**.
-- Allowed paths: `examples/**`, `fixtures/**`, `README.md`, `docs/**`
-- Stop before touching: `AGENTS.md`, `bun.lock`, `bun.lockb`, `package-lock.json`, `pnpm-lock.yaml`, `src/**`, `yarn.lock`
+- Allowed paths: `examples/**`, `fixtures/**`, `docs/**`
+- Stop before touching: `.github/**`, `AGENTS.md`, `README.md`, `__tests__/**`, `bin/**`, `bun.lock`, `bun.lockb`, `package-lock.json`, `package.json`, `pnpm-lock.yaml`, `src/**`, `test/**`, `tests/**`, `tsconfig.json`, `yarn.lock`
 
 ### Checks
 - manual example walkthrough
@@ -99,8 +99,8 @@
 - Kind: `tests`
 - Branch: `lane/fixture-cli-app-tests`
 - Rationale: Test and fixture work can stay isolated to test/**, tests/**, __tests__/**, fixtures/**, package.json while protecting implementation files.
-- Allowed paths: `test/**`, `tests/**`, `__tests__/**`, `fixtures/**`, `package.json`
-- Stop before touching: `AGENTS.md`, `bun.lock`, `bun.lockb`, `package-lock.json`, `pnpm-lock.yaml`, `src/**`, `yarn.lock`
+- Allowed paths: `test/**`, `tests/**`, `__tests__/**`
+- Stop before touching: `.github/**`, `AGENTS.md`, `README.md`, `bin/**`, `bun.lock`, `bun.lockb`, `docs/**`, `examples/**`, `fixtures/**`, `package-lock.json`, `package.json`, `pnpm-lock.yaml`, `src/**`, `tsconfig.json`, `yarn.lock`
 
 ### Checks
 - npm run check

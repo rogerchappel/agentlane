@@ -12,7 +12,7 @@
 - Branch: `lane/docs-site-ci`
 - Rationale: Automation and contributor checks are concentrated in .github/**, scripts/**, which makes CI work easy to review.
 - Allowed paths: `.github/**`, `scripts/**`
-- Stop before touching: `bun.lock`, `bun.lockb`, `package-lock.json`, `pnpm-lock.yaml`, `src/**`, `yarn.lock`
+- Stop before touching: `README.md`, `bun.lock`, `bun.lockb`, `docs/**`, `package-lock.json`, `pnpm-lock.yaml`, `src/**`, `yarn.lock`
 
 ### Checks
 - manual workflow syntax review
@@ -29,7 +29,7 @@
 - Branch: `lane/docs-site-docs`
 - Rationale: The repo already has docs-oriented content, so a docs lane can move quickly inside README.md, docs/**.
 - Allowed paths: `README.md`, `docs/**`
-- Stop before touching: `bun.lock`, `bun.lockb`, `package-lock.json`, `pnpm-lock.yaml`, `src/**`, `yarn.lock`
+- Stop before touching: `.github/**`, `bun.lock`, `bun.lockb`, `package-lock.json`, `pnpm-lock.yaml`, `scripts/**`, `src/**`, `yarn.lock`
 
 ### Checks
 - bash scripts/check-links.sh
