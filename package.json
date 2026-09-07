@@ -36,7 +36,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "check": "tsc -p tsconfig.json --noEmit",
-    "test": "npm run build && node --test test/**/*.test.js",
+    "test": "npm run build && node scripts/run-tests.mjs",
     "smoke": "npm run build && node scripts/smoke.mjs",
     "package:smoke": "npm run build && node scripts/pack-smoke.mjs",
     "docs:check": "node scripts/check-publication-docs.mjs",
