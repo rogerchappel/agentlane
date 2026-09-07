@@ -129,8 +129,10 @@ npm run release:check
 bash scripts/validate.sh
 ```
 
-`npm run release:check` runs the TypeScript check, compiled tests, fixture
-smoke test, and package-surface smoke used for release-candidate review.
+`npm test` discovers the complete nested test tree on every supported Node.js
+version (Node.js 20 and newer). `npm run release:check` runs the TypeScript
+check, compiled tests, fixture smoke test, and package-surface smoke used for
+release-candidate review.
 
 ## Package contents
 
