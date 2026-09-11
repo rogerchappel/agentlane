@@ -13,6 +13,10 @@ This project follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) an
 - Fixture repositories and snapshot-backed tests.
 - Smoke and validation scripts for local verification.
 
+### Fixed
+
+- Declare `"types": ["node"]` in `tsconfig.json` so the project type-checks under TypeScript 7 (no-op on the current TypeScript 5.9.3 build; unblocks the TypeScript 7 upgrade).
+
 ## Release Links
 
 - Unreleased: `https://github.com/rogerchappel/agentlane/compare/...HEAD`
