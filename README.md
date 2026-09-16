@@ -120,6 +120,7 @@ check is detected, the plan names an explicit manual review instead.
 ## Development
 
 ```sh
+npm install
 npm test
 npm run check
 npm run build
@@ -129,6 +130,7 @@ npm run release:check
 bash scripts/validate.sh
 ```
 
+`npm install` ensures that TypeScript can properly resolve the node types.
 `npm test` discovers the complete nested test tree on every supported Node.js
 version (Node.js 20 and newer). `npm run release:check` runs the TypeScript
 check, compiled tests, fixture smoke test, and package-surface smoke used for
