@@ -13,7 +13,8 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "types": ["node"],
-    "sourceMap": true
+    "sourceMap": true,
+    "typeRoots": ["./node_modules/@types", "./node_modules/@types/node"]
   },
   "include": [
     "src/**/*.ts"
