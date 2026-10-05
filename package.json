@@ -41,7 +41,7 @@
     "package:smoke": "npm run build && node scripts/pack-smoke.mjs",
     "docs:check": "node scripts/check-publication-docs.mjs",
     "prepack": "npm run build",
-    "release:check": "npm run check && npm test && npm run smoke && npm run package:smoke && npm run docs:check",
+    "release:check": "npm run check && npm test && npm run smoke && npm run package:smoke && npm run docs:check && bash scripts/validate.sh",
     "lint": "npm run check"
   },
   "repository": {
